@@ -5,6 +5,7 @@ using TetPee.Repository.Entity;
 using TetPee.Service.Category;
 // using TetPee.Repository
 namespace TestRepo.Api.Controller;
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class CategoryController:ControllerBase

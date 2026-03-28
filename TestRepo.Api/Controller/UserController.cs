@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TestRepo.Api.Extensions;
 using TetPee.Repository;
 using TetPee.Repository.Entity;
 using TetPee.Service.User;
@@ -10,9 +12,11 @@ namespace TestRepo.Api.Controller;
 public class UserController:ControllerBase
 {
     private readonly AppDbContext _dbContext;
-    public UserController(AppDbContext dbContext)
+    private readonly IService _userService;
+    public UserController(AppDbContext dbContext,  IService userService)
     {
         _dbContext = dbContext;
+        _userService = userService;
     }
 
     [HttpPost("")]
@@ -31,5 +35,13 @@ public class UserController:ControllerBase
         _dbContext.SaveChanges();
         return Ok("Add User successful");
         
+    }
+
+    [Authorize(Policy = JwtExtensions.AdminPolicy)]
+    [HttpGet("")]
+    public async Task<IActionResult> GetUsers(string? searchTerm, int pageSize = 10, int pageIndex = 1)
+    {
+        var result = await _userService.GetAllUser(searchTerm, pageSize, pageIndex);
+        return Ok(result);
     }
 }

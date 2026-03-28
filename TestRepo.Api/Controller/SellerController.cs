@@ -1,10 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TestRepo.Api.Extensions;
 using TetPee.Repository;
 using TetPee.Repository.Entity;
 using TetPee.Service.Seller;
 
 namespace TestRepo.Api.Controller;
-
+[Authorize(Policy = JwtExtensions.AdminPolicy)]
 [ApiController]
 [Route("[controller]")]
 public class SellerController : ControllerBase
